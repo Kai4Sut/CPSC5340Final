@@ -41,17 +41,19 @@ class FinalViewModel : ObservableObject {
     func saveData (book: FinalModel) {
         if let id = book.id {
             //Edit book
-            let  docRef = db.collection("library").document(id)
-            
-            docRef.updateData([
-                "Title": book.Title,
-                "Author": book.Author,
-                "Notes": book.Notes
-            ]) { err in
-                if let err = err {
-                    print("Error updating document: \(err)")
-                } else {
-                    print("Document successfully updated")
+            if !book.Title.isEmpty {
+                let  docRef = db.collection("library").document(id)
+                
+                docRef.updateData([
+                    "Title": book.Title,
+                    "Author": book.Author,
+                    "Notes": book.Notes
+                ]) { err in
+                    if let err = err {
+                        print("Error updating document: \(err)")
+                    } else {
+                        print("Document successfully updated")
+                    }
                 }
             }
             
