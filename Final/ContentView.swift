@@ -7,15 +7,36 @@
 
 import SwiftUI
 
+
+
 struct ContentView: View {
+    
+    @StateObject var finalApp = FinalViewModel()
+    @State var book = FinalModel(Title: "", Author: "", Notes: "")
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack{
+            List {
+                ForEach($finalApp.library) { $book in NavigationLink {
+                    BookDetail(book: $book)
+                } label: {
+                    Text(book.Title)
+                }
+                }
+                Section {
+                    NavigationLink {
+                        BookDetail(book: $book)
+                    } label: {
+                        Text("Add Book")
+                            .foregroundColor(Color.gray)
+                            .font(.system(size: 15))
+                    }
+                }
+            }
+            .onAppear {
+                finalApp.fetchData()
+            }
         }
-        .padding()
     }
 }
 
