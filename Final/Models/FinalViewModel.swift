@@ -32,11 +32,9 @@ class FinalViewModel : ObservableObject {
                     }
                     
                 }
-                
-                
             }
-        
     }
+    
     
     func saveData (book: FinalModel) {
         if let id = book.id {
@@ -47,6 +45,7 @@ class FinalViewModel : ObservableObject {
                 docRef.updateData([
                     "Title": book.Title,
                     "Author": book.Author,
+                    "ISBN": book.ISBN,
                     "Notes": book.Notes
                 ]) { err in
                     if let err = err {
@@ -56,8 +55,7 @@ class FinalViewModel : ObservableObject {
                     }
                 }
             }
-            
-            
+
         } else {
             //Add book
             if !book.Title.isEmpty {
@@ -65,6 +63,7 @@ class FinalViewModel : ObservableObject {
                 ref = db.collection("library").addDocument(data: [
                     "Title": book.Title,
                     "Author": book.Author,
+                    "ISBN": book.ISBN,
                     "Notes": book.Notes
                 ]) { err in
                     if let err = err {
@@ -74,9 +73,17 @@ class FinalViewModel : ObservableObject {
                     }
                 }
             }
-            
         }
-        
     }
     
+    
+    func deleteData (book: FinalModel) {
+        if let id = book.id {
+            //Delete book
+                db.collection("library").document(id).delete()
+            
+        } else {
+            //Do nothing if no book id
+            }
+        }
 }

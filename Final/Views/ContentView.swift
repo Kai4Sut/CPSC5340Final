@@ -12,7 +12,7 @@ import SwiftUI
 struct ContentView: View {
     
     @StateObject var finalApp = FinalViewModel()
-    @State var book = FinalModel(Title: "", Author: "", Notes: "")
+    @State var book = FinalModel(Title: "", Author: "", ISBN: "", Notes: "")
     
     var body: some View {
         NavigationStack{
@@ -20,7 +20,20 @@ struct ContentView: View {
                 ForEach($finalApp.library) { $book in NavigationLink {
                     BookDetail(book: $book)
                 } label: {
-                    Text(book.Title)
+                    HStack{
+                        Image(systemName: "book.closed.fill")
+                            .resizable()
+                            .frame(width: 30, height: 40)
+                            .foregroundColor(.green)
+                            .padding(10)
+                            
+                        VStack {
+                            Text(book.Title)
+                                .font(.system(size: 25))
+                            Text(book.Author)
+                                .font(.system(size:15))
+                        }
+                    }
                 }
                 }
                 Section {
@@ -34,6 +47,9 @@ struct ContentView: View {
                 }
             }
             .onAppear {
+                finalApp.fetchData()
+            }
+            .refreshable {
                 finalApp.fetchData()
             }
         }
